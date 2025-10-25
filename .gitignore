@@ -1,8 +1,9 @@
 node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
-.vinxi
-.netlify
 .env
+.env.local
+*.log
+apps/backend/dist
+apps/backend/coverage
+apps/frontend/.next
+apps/frontend/coverage
+coverage

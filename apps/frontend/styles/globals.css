@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-black text-slate-100 font-sans;
+  background-image: radial-gradient(circle at top, rgba(37, 99, 235, 0.2), transparent 35%),
+    radial-gradient(circle at bottom, rgba(56, 189, 248, 0.15), transparent 45%);
+  min-height: 100vh;
+}
+
+a {
+  @apply text-sky-400 hover:text-sky-300;
+}

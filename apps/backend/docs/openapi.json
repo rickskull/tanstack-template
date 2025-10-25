@@ -1,0 +1,95 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SkVoid Marketplace API",
+    "version": "1.0.0",
+    "description": "API para o marketplace SkVoid"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Desenvolvimento"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string", "minLength": 8 },
+          "name": { "type": "string" }
+        },
+        "required": ["email", "password", "name"]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Registrar usuário",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": ["Auth"],
+        "responses": {
+          "200": {
+            "description": "Tokens gerados"
+          }
+        }
+      }
+    },
+    "/wallet/topup": {
+      "post": {
+        "summary": "Criar topup",
+        "tags": ["Wallet"],
+        "responses": {
+          "201": {
+            "description": "Preferência criada"
+          }
+        }
+      }
+    },
+    "/webhooks/mp": {
+      "post": {
+        "summary": "Webhook Mercado Pago",
+        "tags": ["Payments"],
+        "responses": {
+          "200": {
+            "description": "Processado"
+          }
+        }
+      }
+    }
+  }
+}

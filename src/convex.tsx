@@ -1,19 +1,35 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
 
-// Get the Convex URL from environment variables
-const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+function createConvexClient(): ConvexReactClient | null {
+  const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
 
-// Initialize the Convex client only if URL is provided
-const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+  if (!convexUrl) {
+    console.warn('No Convex URL provided. Skipping Convex integration.');
+    return null;
+  }
+
+  try {
+    const normalizedUrl = new URL(convexUrl);
+    return new ConvexReactClient(normalizedUrl.toString());
+  } catch (error) {
+    console.error('Invalid Convex URL provided. Skipping Convex integration.', error);
+    return null;
+  }
+}
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  // If no Convex URL is provided, just render the children without the ConvexProvider
+  const convex = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    return createConvexClient();
+  }, []);
+
   if (!convex) {
-    console.warn('No Convex URL provided. Skipping Convex integration.');
     return <>{children}</>;
   }
-  
-  // Otherwise, wrap children with ConvexProvider
+
   return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }
